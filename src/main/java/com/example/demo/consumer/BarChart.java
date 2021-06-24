@@ -38,14 +38,14 @@ public class BarChart extends ApplicationFrame {
     }
 
     private CategoryDataset averageVoteInIMDB() throws ReportYearNotAvailable {
-        double[] result = restClient.showHappinessReportAndImdbRating("Running for Grace");
-        double[] secondResult = restClient.showHappinessReportAndImdbRating("Milada");
+        double[] result = restClient.showHappinessReportAndImdbRating("One Day");
+        double[] secondResult = restClient.showHappinessReportAndImdbRating("White Island");
         final String series1 = "Average Vote in IMDB";
         final String series2 = "";
 
-        final String category = "" + (int) result[2] + ", Running for Grace, " + restClient.getNetflixMovieCountry("Running for Grace");
+        final String category = "" + (int) result[2] + ", One day, " + restClient.getNetflixMovieCountry("One Day");
 
-        final String category2 = "" + (int) secondResult[2] + ", Milada, " + restClient.getNetflixMovieCountry("Milada");
+        final String category2 = "" + (int) secondResult[2] + ", White Island, " + restClient.getNetflixMovieCountry("White Island");
         final DefaultCategoryDataset dataset = new DefaultCategoryDataset();
 
         dataset.addValue(result[0], series1, category);
@@ -58,13 +58,13 @@ public class BarChart extends ApplicationFrame {
     }
 
     private CategoryDataset happinessRankByCountryAndYear() throws ReportYearNotAvailable {
-        double[] result = restClient.showHappinessReportAndImdbRating("Running for Grace");
-        double[] secondResult = restClient.showHappinessReportAndImdbRating("Milada");
+        double[] result = restClient.showHappinessReportAndImdbRating("One Day");
+        double[] secondResult = restClient.showHappinessReportAndImdbRating("White Island");
 
         final String series1 = "";
         final String series2 = "Happiness Score";
-        final String category = "" + (int) result[2] + ", Running for Grace, " + restClient.getNetflixMovieCountry("Running for Grace");
-        final String category2 = "" + (int) secondResult[2] + ", Milada, " + restClient.getNetflixMovieCountry("Milada");
+        final String category = "" + (int) result[2] + ", One Day, " + restClient.getNetflixMovieCountry("One Day");
+        final String category2 = "" + (int) secondResult[2] + ", White Island, " + restClient.getNetflixMovieCountry("White Island");
 
         final DefaultCategoryDataset dataset = new DefaultCategoryDataset();
 
@@ -105,11 +105,8 @@ public class BarChart extends ApplicationFrame {
                         result.add(item);
                     }
                 }
-
                 return result;
-
             }
-
         };
 
         final JFreeChart chart = new JFreeChart("Average vote on IMDB and Happiness Rank based on release year and country by Netflix movie", plot);
@@ -128,11 +125,9 @@ public class BarChart extends ApplicationFrame {
     }
 
     public static void main(final String[] args) throws ReportYearNotAvailable {
-
         final BarChart demo = new BarChart("Bar chart");
         demo.pack();
         RefineryUtilities.centerFrameOnScreen(demo);
         demo.setVisible(true);
-
     }
 }
