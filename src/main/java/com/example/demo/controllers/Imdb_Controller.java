@@ -24,21 +24,25 @@ public class Imdb_Controller {
 
     @ApiOperation(value = "Get list of IMDB movies", response = List.class)
     @GetMapping(path = "/imdb_movies",
-            produces = { "application/json", "application/xml" })
+            produces = {"application/json", "application/xml"})
     public List<Imdb> getAllImdbs() {
         return imdb_repository.findAll();
     }
 
     @ApiOperation(value = "Get one IMDB movie by title", response = Imdb.class)
     @GetMapping(value = "/imdb_movies/{Title}",
-            produces = { "application/json", "application/xml" })
-    public Imdb getCountry(@PathVariable String Title) {
-        return imdb_repository.findImdbByTitle(Title);
+            produces = {"application/json", "application/xml"})
+    public Object getCountry(@PathVariable String Title) {
+        if (imdb_repository.findImdbByTitle(Title) != null) {
+            return imdb_repository.findImdbByTitle(Title);
+        } else {
+            return new ResponseEntity<Imdb>(HttpStatus.NOT_FOUND);
+        }
     }
 
     @ApiOperation(value = "Delete IMDB movie by title", response = String.class)
     @DeleteMapping(value = "/imdb_movies/delete/{Title}",
-            produces = { "application/json", "application/xml" })
+            produces = {"application/json", "application/xml"})
     public String deleteCountry(@PathVariable String Title) {
         imdb_repository.deleteImdbByTitle(Title);
         return Title + " is deleted";
@@ -46,13 +50,12 @@ public class Imdb_Controller {
 
     @ApiOperation(value = "Update IMDB movie by title", response = ResponseEntity.class)
     @PutMapping(value = "/imdb_movies/update/{Title}",
-            produces = { "application/json", "application/xml" },
-            consumes = { "application/json", "application/xml" })
+            produces = {"application/json", "application/xml"},
+            consumes = {"application/json", "application/xml"})
     public ResponseEntity<Imdb> updateCountry(@Validated @RequestBody Imdb imdbDetails, @PathVariable String Title) {
 
         Optional<Imdb> imdbData = Optional.ofNullable(imdb_repository.findImdbByTitle(Title));
-        if(imdbData.isPresent())
-        {
+        if (imdbData.isPresent()) {
             Imdb imdb = imdbData.get();
             imdb.setActors(imdbDetails.getActors());
             imdb.setAvg_Vote(imdbDetails.getAvg_Vote());
@@ -78,9 +81,7 @@ public class Imdb_Controller {
             imdb.setDate_Published(imdbDetails.getDate_Published());
             imdb.setOriginal_title(imdbDetails.getOriginal_title());
             return new ResponseEntity<>(imdb_repository.save(imdb), HttpStatus.OK);
-        }
-        else
-        {
+        } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
@@ -88,8 +89,8 @@ public class Imdb_Controller {
 
     @ApiOperation(value = "Create IMDB movie", response = ResponseEntity.class)
     @PostMapping(value = "/imdb_movies/create",
-            produces = { "application/json", "application/xml" },
-            consumes = { "application/json", "application/xml" })
+            produces = {"application/json", "application/xml"},
+            consumes = {"application/json", "application/xml"})
     public ResponseEntity<Imdb> createImdb(@RequestBody Imdb imdb) {
         boolean isImdbFound = false;
         for (Imdb imdbs : getAllImdbs()) {
@@ -100,7 +101,7 @@ public class Imdb_Controller {
         }
         if (!isImdbFound) {
             try {
-                Imdb newImdb= imdb_repository
+                Imdb newImdb = imdb_repository
                         .save(imdb);
                 return new ResponseEntity<>(newImdb, HttpStatus.CREATED);
             } catch (Exception e) {
