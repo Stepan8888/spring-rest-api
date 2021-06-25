@@ -1,6 +1,7 @@
 # REST API
 
 This readme file will explain how to run this project and get you going for further development.
+Swagger documentation can be found at https://localhost:8080/swagger-ui.html
 
 You need:
 
